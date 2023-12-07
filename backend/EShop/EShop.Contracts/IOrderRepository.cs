@@ -1,12 +1,12 @@
 ﻿using EShop.Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EShop.Contracts;
 
 public interface IOrderRepository : IRepositoryBase<Order>
 {
+    Task<IEnumerable<Order>> GetAllOrdersAsync(bool trackChanges);
+    Task<Order> GetOrderAsync(Guid orderId, bool trackChanges);
+    Task CreateOrderAsync(Order order);
+    void DeleteOrder(Order order);
+    void UpdateOrder(Order order);
 }
