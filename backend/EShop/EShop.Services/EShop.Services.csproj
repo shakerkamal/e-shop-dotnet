@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EShop.Repositories\EShop.Repositories.csproj" />
+    <ProjectReference Include="..\EShop.Repositories\EShop.Repository.csproj" />
     <ProjectReference Include="..\EShop.Shared\EShop.Shared.csproj" />
   </ItemGroup>
 

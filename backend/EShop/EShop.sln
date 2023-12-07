@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.Contracts", "EShop.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.Entities", "EShop.Entities\EShop.Entities.csproj", "{CFBFA1B0-7499-4742-B052-EA7D843CD932}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.Repositories", "EShop.Repositories\EShop.Repositories.csproj", "{1EC8C84B-602E-4DC2-8204-31E81CA161E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.Repository", "EShop.Repositories\EShop.Repository.csproj", "{1EC8C84B-602E-4DC2-8204-31E81CA161E3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EShop.Services", "EShop.Services\EShop.Services.csproj", "{3303309E-894C-4CEF-9170-599C5AA3924A}"
 EndProject
