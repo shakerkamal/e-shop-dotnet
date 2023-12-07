@@ -7,7 +7,7 @@ public interface IRepositoryBase<T> where T : class
     T Get(string id);
     T Get(Expression<Func<T, bool>> expression);
     Task<T> GetAsync(Expression<Func<T, bool>> expression);
-    ValueTask<T> GetAsync(Guid id, CancellationToken cancellationToken = default);
+    ValueTask<T> GetAsync(string id, CancellationToken cancellationToken = default);
     IQueryable<T> GetAll(bool trackChanges);
     Task<IQueryable<T>> GetAllAsync(bool trackChanges, CancellationToken cancellationToken = default);
     Task<PaginatedList<T>> GetAllAsync(Expression<Func<T, bool>> expression, Expression<Func<T, string>> order, int pageNumber, int pageSize, bool isAscending = true);
