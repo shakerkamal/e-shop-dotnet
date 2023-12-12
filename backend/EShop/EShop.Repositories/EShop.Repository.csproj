@@ -1,12 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\EShop.Contracts\EShop.Contracts.csproj" />
     <ProjectReference Include="..\EShop.Entities\EShop.Entities.csproj" />
     <ProjectReference Include="..\EShop.Shared\EShop.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Implementations\" />
   </ItemGroup>
 
   <PropertyGroup>
