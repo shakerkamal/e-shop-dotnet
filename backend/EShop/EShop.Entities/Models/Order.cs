@@ -2,11 +2,13 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace EShop.Entities.Models;
-public class Order
+
+[BsonCollection("orders")]
+public class Order : CoreBaseEntity
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = null!;
+    //[BsonId]
+    //[BsonRepresentation(BsonType.ObjectId)]
+    //public string Id { get; set; } = null!;
 
     [BsonRepresentation(BsonType.ObjectId)]
     [BsonRequired]

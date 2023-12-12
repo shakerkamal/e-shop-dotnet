@@ -3,11 +3,12 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace EShop.Entities.Models;
 
-public class User
+[BsonCollection("users")]
+public class User : CoreBaseEntity
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = null!;
+    //[BsonId]
+    //[BsonRepresentation(BsonType.ObjectId)]
+    //public string Id { get; set; } = null!;
     [BsonRequired]
     public string? Name { get; set; }
 

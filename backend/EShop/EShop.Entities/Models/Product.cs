@@ -13,11 +13,12 @@ public class Review
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }
 
-public class Product
+[BsonCollection("products")]
+public class Product : CoreBaseEntity
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = null!;
+    //[BsonId]
+    //[BsonRepresentation(BsonType.ObjectId)]
+    //public string Id { get; set; } = null!;
     [BsonRepresentation(BsonType.ObjectId)]
     [BsonRequired]
     public string UserId { get; set; } = null!;
