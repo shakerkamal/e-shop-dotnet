@@ -84,6 +84,7 @@ public abstract class RepositoryBase<TDocument> : IRepositoryBase<TDocument> whe
 
     public PaginatedList<TDocument> GetAll(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true)
     {
+        //var 
         throw new NotImplementedException();
     }
 
