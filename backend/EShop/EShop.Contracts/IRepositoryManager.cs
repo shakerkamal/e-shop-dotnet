@@ -4,6 +4,6 @@ public interface IRepositoryManager
 {
     IProductRepository Product { get; }
     IOrderRepository Order { get; }
-    Task SaveAsync();
+    Task SaveChangesAsync();
     ValueTask DisposeAsync();
 }

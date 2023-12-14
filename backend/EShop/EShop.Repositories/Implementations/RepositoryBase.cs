@@ -1,4 +1,5 @@
-﻿using EShop.Contracts;
+﻿using Amazon.Auth.AccessControlPolicy;
+using EShop.Contracts;
 using EShop.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -10,10 +11,9 @@ public abstract class RepositoryBase<TDocument> : IRepositoryBase<TDocument> whe
 {
     private readonly IMongoCollection<TDocument> _collection;
 
-    protected RepositoryBase(IMongoDbSettings settings)
+    protected RepositoryBase(IMongoDatabase mongoDatabase)
     {
-        var database = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
-        _collection = database.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
+        _collection = mongoDatabase.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
     }
 
     private protected string GetCollectionName(Type documentType)
@@ -84,13 +84,48 @@ public abstract class RepositoryBase<TDocument> : IRepositoryBase<TDocument> whe
 
     public PaginatedList<TDocument> GetAll(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true)
     {
-        //var 
-        throw new NotImplementedException();
+        var totalItems = _collection.CountDocuments(expression);
+        List<TDocument> list = new List<TDocument>();
+        if (isAscending)
+        {
+            //sort by ascending order
+        }
+        else
+        {
+            //sort by descending order
+        }
+        var pagedResponse = _collection
+            .Find(expression)
+            .Skip((pageNumber - 1) * pageSize)
+            .Limit(pageSize)
+            //.SortBy(order) 
+            .ToList();
+
+        var paginatedList = new PaginatedList<TDocument>(totalItems, pageNumber, pageSize, pagedResponse);
+        return paginatedList;
     }
 
-    public Task<PaginatedList<TDocument>> GetAllAsync(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true)
+    public async Task<PaginatedList<TDocument>> GetAllAsync(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true)
     {
-        throw new NotImplementedException();
+        List<TDocument> list = new List<TDocument>();
+        var totalItems = await _collection.CountDocumentsAsync(expression);
+        if (isAscending)
+        {
+            //sort by ascending order
+        }
+        else
+        {
+            //sort by descending order
+        }
+        var pagedResponse = await _collection
+            .Find(expression)
+            .Skip((pageNumber - 1) * pageSize)
+            .Limit(pageSize)
+            //.SortBy(order) 
+            .ToListAsync();
+
+        var paginatedList = new PaginatedList<TDocument>(totalItems, pageNumber, pageSize, pagedResponse);
+        return paginatedList;
     }
 
     public async ValueTask<TDocument> GetAsync(string id, CancellationToken cancellationToken = default)

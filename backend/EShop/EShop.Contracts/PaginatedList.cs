@@ -4,12 +4,12 @@ namespace EShop.Contracts;
 
 public class PaginatedList<T>
 {
-    public int TotalItems { get; private set; }
+    public long TotalItems { get; private set; }
     public int PageNumber { get; private set; }
     public int PageSize { get; private set; }
     public List<T> List { get; private set; }
 
-    public PaginatedList(int totalItems, int pageNumber, int pageSize, List<T> list)
+    public PaginatedList(long totalItems, int pageNumber, int pageSize, List<T> list)
     {
         this.TotalItems = totalItems;
         this.PageNumber = pageNumber;
@@ -30,12 +30,12 @@ public class PaginatedList<T>
 
     public class PagingHeader
     {
-        public int TotalItems { get; }
+        public long TotalItems { get; }
         public int PageNumber { get; }
         public int PageSize { get; }
         public int TotalPages { get; }
 
-        public PagingHeader(int totalItems, int pageNumber, int pageSize, int totalPages)
+        public PagingHeader(long totalItems, int pageNumber, int pageSize, int totalPages)
         {
             this.TotalItems = totalItems;
             this.PageNumber = pageNumber;
