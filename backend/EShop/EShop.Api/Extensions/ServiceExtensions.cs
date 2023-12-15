@@ -2,7 +2,6 @@
 using EShop.Contracts;
 using EShop.Repository;
 using EShop.Repository.Implementations;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace EShop.Api.Extensions;
@@ -27,5 +26,5 @@ public static class ServiceExtensions
     {
         services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly));
     }
-        
+
 }

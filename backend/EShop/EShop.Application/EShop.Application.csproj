@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Folder Include="Commands\" />
-    <Folder Include="Queries\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="MediatR" Version="12.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EShop.Contracts\EShop.Contracts.csproj" />
+    <ProjectReference Include="..\EShop.Shared\EShop.Shared.csproj" />
   </ItemGroup>
 
 </Project>
