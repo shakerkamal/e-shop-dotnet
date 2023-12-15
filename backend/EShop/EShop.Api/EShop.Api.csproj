@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EShop.Application\EShop.Application.csproj" />
     <ProjectReference Include="..\EShop.LoggerService\EShop.LoggerService.csproj" />
     <ProjectReference Include="..\EShop.Services\EShop.Services.csproj" />
     <ProjectReference Include="..\EShop.Shared\EShop.Shared.csproj" />
