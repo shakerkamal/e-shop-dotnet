@@ -1,5 +1,6 @@
 ﻿using EShop.Contracts;
 using EShop.Repository;
+using EShop.Repository.Implementations;
 using Microsoft.Extensions.Options;
 
 namespace EShop.Api.Extensions;
@@ -13,6 +14,11 @@ public static class ServiceExtensions
         services.AddSingleton<IMongoDbSettings>(serviceProvider =>
             serviceProvider.GetRequiredService<IOptions<IMongoDbSettings>>().Value
             );
+    }
+
+    public static void ConfigureRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IRepositoryManager, RepositoryManager>();
     }
         
 }
