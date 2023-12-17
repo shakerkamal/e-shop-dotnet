@@ -1,5 +1,6 @@
-﻿using EShop.Application.Queries.GetProducts;
-using EShop.Contracts;
+﻿using EShop.Application.Commands.CreateProduct;
+using EShop.Application.Queries.GetProducts;
+using EShop.Shared.DataTransferObjects.ProductDtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,13 @@ namespace EShop.Api.Controllers
         {
             var products = await _sender.Send(new GetProductsQuery());
             return Ok(products);
+        }
+
+        [HttpPost(Name = "CreateProduct")]
+        public async Task<IActionResult> CreateProduct([FromBody]CreateProductDto productDto)
+        {
+            var product = await _sender.Send(new CreateProductCommand(productDto));
+            return Ok(product);
         }
     }
 }

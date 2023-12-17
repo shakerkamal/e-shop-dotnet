@@ -1,5 +1,5 @@
 ﻿namespace EShop.Repository.Configurations;
 
-public static class ProductDataConfiguration
+public class ProductDataConfiguration
 {
 }

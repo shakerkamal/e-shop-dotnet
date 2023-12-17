@@ -2,6 +2,7 @@
 using EShop.Entities.Models;
 using EShop.Shared.DataTransferObjects.OrderDtos;
 using EShop.Shared.DataTransferObjects.ProductDtos;
+using EShop.Shared.DataTransferObjects.UserDtos;
 
 namespace EShop.Api
 {
@@ -18,6 +19,9 @@ namespace EShop.Api
             CreateMap<Order, OrderDetailsDto>();
             CreateMap<CreateOrderDto, Order>();
             CreateMap<UpdateOrderDto, Order>();
+
+            CreateMap<User, UserIndexDto>();
+            CreateMap<CreateUserDto, UserIndexDto>();
         }
     }
 }

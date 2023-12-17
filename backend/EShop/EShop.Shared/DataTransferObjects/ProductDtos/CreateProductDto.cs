@@ -10,6 +10,7 @@ public record CreateProductDto(
     List<Review>? Reviews,
     double Rating,
     int NumReviews,
-    double Price);
+    double Price,
+    int CountInStock);
 
 public record Review(string? Name, int Rating, string? Comment);

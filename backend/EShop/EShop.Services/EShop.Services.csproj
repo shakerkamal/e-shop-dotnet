@@ -5,14 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\EShop.Repositories\EShop.Repository.csproj" />
-    <ProjectReference Include="..\EShop.Shared\EShop.Shared.csproj" />
+	<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+	<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Implementations\" />
+    <ProjectReference Include="..\EShop.LoggerService\EShop.LoggerService.csproj" />
+    <ProjectReference Include="..\EShop.Repositories\EShop.Repository.csproj" />
   </ItemGroup>
 
 </Project>
