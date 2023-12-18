@@ -5,6 +5,7 @@ using EShop.Entities.Models;
 using EShop.LoggerService;
 using EShop.Services.Contracts;
 using EShop.Shared.DataTransferObjects.ProductDtos;
+using MongoDB.Bson;
 using System.Collections;
 
 namespace EShop.Services.Implementations;
@@ -13,26 +14,23 @@ public class ProductService : IProductService
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly ILoggerManager _loggerManager;
-    private readonly IMapper _mapper;
 
     public ProductService(IRepositoryManager repositoryManager, 
-                        ILoggerManager loggerManager,
-                        IMapper mapper)
+                        ILoggerManager loggerManager)
     {
         _repositoryManager = repositoryManager;
         _loggerManager = loggerManager;
-        _mapper = mapper;
     }
 
     public async Task<IEnumerable<ProductIndexDto>> GetAllProductsAsync()
     {
         var products = await _repositoryManager.Product.GetAllAsync();
 
-        var response = ConvertToProductIndexDto(products);
+        var response = MapToProductIndexDtos(products);
         return response;
     }
 
-    public async Task<ProductIndexDto> GetProductAsync(string productId)
+    public async Task<ProductDetailsDto> GetProductAsync(string productId)
     {
         if (string.IsNullOrEmpty(productId))
         {
@@ -41,32 +39,34 @@ public class ProductService : IProductService
         var product = await _repositoryManager.Product.GetAsync(productId);
         if (product == null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(productId);
         }
 
-        return new ProductIndexDto(
+        var reviews = MapReviewsToReviewDto(product.Reviews);
+
+        return new ProductDetailsDto(
+            product.Id.ToString(),
+            product.UserId,
             product.Name,
             product.Image,
             product.Brand,
             product.Category,
+            product.Description,
+            reviews,
+            product.Rating,
             product.NumReviews,
             product.Price,
-            product.Rating);
+            product.CountInStock);
     }
+
     public async Task<ProductIndexDto> CreateProductAsync(CreateProductDto product)
     {
         var productDocument = MapProductDtoToDocument(product);
 
         await _repositoryManager.Product.AddAsync(productDocument);
+        var productIndex = MapProductToProductIndexDto(productDocument);
 
-        return new ProductIndexDto(
-            productDocument.Name, 
-            productDocument.Image, 
-            productDocument.Brand, 
-            productDocument.Category, 
-            productDocument.NumReviews, 
-            productDocument.Price, 
-            productDocument.Rating);
+        return productIndex;
     }
 
     public Task<(IEnumerable<ProductIndexDto> products, string ids)> CreateProductCollectionAsync(IEnumerable<CreateProductDto> productCollection)
@@ -74,9 +74,10 @@ public class ProductService : IProductService
         throw new NotImplementedException();
     }
 
-    public Task DeleteProductAsync(string productId)
+    public async Task DeleteProductAsync(string productId)
     {
-        throw new NotImplementedException();
+        var objectId = new ObjectId(productId);
+        await _repositoryManager.Product.DeleteAsync(u => u.Id == objectId);
     }
 
     public Task<IEnumerable<ProductIndexDto>> GetByIdsAsync(IEnumerable<string> ids)
@@ -84,9 +85,23 @@ public class ProductService : IProductService
         throw new NotImplementedException();
     }
 
-    public Task UpdateProductAsync(string productid, UpdateProductDto productForUpdate)
+    public async Task UpdateProductAsync(string productid, UpdateProductDto productForUpdate)
     {
-        throw new NotImplementedException();
+        var productDocument = await _repositoryManager.Product.GetAsync(productid);
+
+        productDocument.Name = productForUpdate.Name;
+        productDocument.Image = productForUpdate.Image;
+        productDocument.NumReviews = productForUpdate.NumReviews;
+        productDocument.Price = productForUpdate.Price;
+        productDocument.Brand = productForUpdate.Brand;
+        productDocument.Category = productForUpdate.Category;
+        productDocument.CountInStock = productForUpdate.CountInStock;
+        productDocument.Description = productForUpdate.Description;
+        productDocument.UserId = productForUpdate.UserId;
+
+        //TODO: update reviews for the product
+
+        _repositoryManager.Product.Update(productDocument);
     }
 
     #region private methods
@@ -116,34 +131,40 @@ public class ProductService : IProductService
     }
 
 
-    private List<ProductIndexDto> ConvertToProductIndexDto(IEnumerable<Product> products)
+    private List<ProductIndexDto> MapToProductIndexDtos(IEnumerable<Product> products)
     {
         var productsDto = new List<ProductIndexDto>();  
         foreach (var product in products)
         {
-            var productDto = new ProductIndexDto(
-                product.Name,
-                product.Image,
-                product.Brand,
-                product.Category,
-                product.NumReviews,
-                product.Price,
-                product.Rating);
+            var productDto = MapProductToProductIndexDto(product);
             productsDto.Add(productDto);
         }
 
         return productsDto;
     }
 
-    private List<Entities.Models.Review>? MapProductReviews(List<Shared.DataTransferObjects.ProductDtos.Review>? reviews)
+    private ProductIndexDto MapProductToProductIndexDto(Product product)
+    {
+        return new ProductIndexDto(
+                product.Id.ToString(),
+                product?.Name,
+                product?.Image,
+                product?.Brand,
+                product?.Category,
+                product.NumReviews,
+                product.Price,
+                product.Rating);
+    }
+
+    private List<Review>? MapProductReviews(List<ReviewDto>? reviews)
     {
         if (reviews is not null)
         {
-            var reviewDocuments = new List<Entities.Models.Review>();
+            var reviewDocuments = new List<Review>();
 
             foreach (var review in reviews)
             {
-                var reviewDocument = new Entities.Models.Review
+                var reviewDocument = new Review
                 {
                     Name=review.Name,
                     Comment = review.Comment,
@@ -153,7 +174,23 @@ public class ProductService : IProductService
                 reviewDocuments.Add(reviewDocument);
             }
         }
-        return Enumerable.Empty<Entities.Models.Review>().ToList();
+        return Enumerable.Empty<Review>().ToList();
+    }
+
+
+    private List<ReviewDto>? MapReviewsToReviewDto(List<Review>? reviews)
+    {
+        if (reviews is not null)
+        {
+            var reviewDtos = new List<ReviewDto>();
+
+            foreach (var review in reviews)
+            {
+                var reviewDto = new ReviewDto(review.Name, review.Rating, review.Comment);
+                reviewDtos.Add(reviewDto);
+            }
+        }
+        return Enumerable.Empty<ReviewDto>().ToList();
     }
 
     #endregion

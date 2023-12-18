@@ -6,9 +6,6 @@ namespace EShop.Entities.Models;
 [BsonCollection("orders")]
 public class Order : CoreBaseEntity
 {
-    //[BsonId]
-    //[BsonRepresentation(BsonType.ObjectId)]
-    //public string Id { get; set; } = null!;
 
     [BsonRepresentation(BsonType.ObjectId)]
     [BsonRequired]

@@ -21,9 +21,9 @@ public class User : CoreBaseEntity
     [BsonRequired]
     public bool IsAdmin { get; set; }
 
-    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-    public DateTime CreatedAt { get; set; }
+    [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-    public DateTime UpdatedAt { get; set; }
+    [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

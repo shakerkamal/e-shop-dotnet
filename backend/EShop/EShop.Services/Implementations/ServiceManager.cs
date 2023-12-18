@@ -17,12 +17,11 @@ public class ServiceManager : IServiceManager
     private Lazy<IUserService> _userService;
 
     public ServiceManager(IRepositoryManager repositoryManager,
-                            ILoggerManager loggerManager,
-                            IMapper mapper)
+                            ILoggerManager loggerManager)
     {
-        _productService = new Lazy<IProductService>(() => new ProductService(repositoryManager, loggerManager, mapper));
-        _orderService = new Lazy<IOrderService>(() => new OrderService(repositoryManager, loggerManager, mapper));
-        _userService = new Lazy<IUserService>(() => new UserService(repositoryManager, loggerManager, mapper));
+        _productService = new Lazy<IProductService>(() => new ProductService(repositoryManager, loggerManager));
+        _orderService = new Lazy<IOrderService>(() => new OrderService(repositoryManager, loggerManager));
+        _userService = new Lazy<IUserService>(() => new UserService(repositoryManager, loggerManager));
     }
     public IProductService ProductService => _productService.Value;
 

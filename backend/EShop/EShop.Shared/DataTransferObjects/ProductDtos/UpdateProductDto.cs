@@ -1,9 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace EShop.Shared.DataTransferObjects.ProductDtos;
 
-namespace EShop.Shared.DataTransferObjects.ProductDtos;
-
-public record UpdateProductDto();
+public record UpdateProductDto(
+    string UserId,
+    string? Name,
+    string? Image,
+    string? Brand,
+    string? Category,
+    string? Description,
+    List<ReviewDto>? Reviews,
+    double Rating,
+    int NumReviews,
+    double Price,
+    int CountInStock);

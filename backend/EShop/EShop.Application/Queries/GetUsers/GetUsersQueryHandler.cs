@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EShop.Application.Commands.GetUsers;
+namespace EShop.Application.Queries.GetUsers;
 
 internal sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IEnumerable<UserIndexDto>>
 {

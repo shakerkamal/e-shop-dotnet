@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace EShop.Entities.Exceptions;
 
-public class ProductNotFoundException : NotFoundException
+public class UserNotFoundException : NotFoundException
 {
-    public ProductNotFoundException(string? message) : base(message)
+    public UserNotFoundException(string? message) : base(message)
     {
     }
 }

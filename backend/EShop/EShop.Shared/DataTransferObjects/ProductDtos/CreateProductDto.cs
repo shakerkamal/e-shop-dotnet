@@ -7,10 +7,10 @@ public record CreateProductDto(
     string? Brand,
     string? Category,
     string? Description,
-    List<Review>? Reviews,
+    List<ReviewDto>? Reviews,
     double Rating,
     int NumReviews,
     double Price,
     int CountInStock);
 
-public record Review(string? Name, int Rating, string? Comment);
+public record ReviewDto(string? Name, int Rating, string? Comment);

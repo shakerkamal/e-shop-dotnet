@@ -1,8 +1,4 @@
-﻿using EShop.Application.Commands.CreateUser;
-using EShop.Application.Commands.GetUsers;
-using EShop.Shared.DataTransferObjects.UserDtos;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EShop.Api.Controllers
@@ -17,18 +13,11 @@ namespace EShop.Api.Controllers
             _sender = sender;
         }
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> RegisterUser(CreateUserDto user)
+        [HttpPost("Login")]
+        public async Task<IActionResult> LoginUser([FromBody]string userName, string password)
         {
-            var response = await _sender.Send(new CreateUserCommand(user));
-            return Ok(response);
+            throw new NotImplementedException();
         }
 
-        [HttpGet("users")]
-        public async Task<IActionResult> GetUsers()
-        {
-            var response = await _sender.Send(new GetUsersQuery());
-            return Ok(response);
-        }
     }
 }

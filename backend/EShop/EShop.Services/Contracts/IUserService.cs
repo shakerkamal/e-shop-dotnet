@@ -1,10 +1,4 @@
 ﻿using EShop.Shared.DataTransferObjects.UserDtos;
-using EShop.Shared.DataTransferObjects.UserDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EShop.Services.Contracts;
 
@@ -16,5 +10,6 @@ public interface IUserService
     Task<IEnumerable<UserIndexDto>> GetByIdsAsync(IEnumerable<string> ids);
     Task<(IEnumerable<UserIndexDto> Users, string ids)> CreateUserCollectionAsync(IEnumerable<CreateUserDto> userCollection);
     Task DeleteUserAsync(string userId);
-    //Task UpdateUserAsync(Guid Userid, UpdateUserDto UserForUpdate);
+    Task UpdateUserAsync(string userid, UpdateUserDto updateUser);
+    Task<bool> UserExist(string userid);
 }

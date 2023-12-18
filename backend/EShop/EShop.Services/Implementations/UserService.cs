@@ -4,6 +4,7 @@ using EShop.Entities.Models;
 using EShop.LoggerService;
 using EShop.Services.Contracts;
 using EShop.Shared.DataTransferObjects.UserDtos;
+using MongoDB.Bson;
 
 namespace EShop.Services.Implementations;
 
@@ -11,20 +12,17 @@ public class UserService : IUserService
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly ILoggerManager _loggerManager;
-    private readonly IMapper _mapper;
 
     public UserService(IRepositoryManager repositoryManager, 
-                    ILoggerManager loggerManager,
-                    IMapper mapper)
+                    ILoggerManager loggerManager)
     {
         _repositoryManager = repositoryManager;
         _loggerManager = loggerManager;
-        _mapper = mapper;
     }
     public async Task<UserIndexDto> CreateUserAsync(CreateUserDto user)
     {
         var encryptedPassword = GeneratePassword(user.Password);
-        var userDocument =new User 
+        var userDocument = new User 
         {
             Name = user.Name,
             Email = user.Email,
@@ -42,9 +40,10 @@ public class UserService : IUserService
         throw new NotImplementedException();
     }
 
-    public Task DeleteUserAsync(string userId)
+    public async Task DeleteUserAsync(string userId)
     {
-        throw new NotImplementedException();
+        var objectId = new ObjectId(userId);
+        await _repositoryManager.User.DeleteAsync(u => u.Id == objectId);
     }
 
     public async Task<IEnumerable<UserIndexDto>> GetAllUsersAsync()
@@ -60,10 +59,32 @@ public class UserService : IUserService
         throw new NotImplementedException();
     }
 
-    public Task<UserIndexDto> GetUserAsync(string userId)
+    public async Task<UserIndexDto> GetUserAsync(string userId)
     {
-        throw new NotImplementedException();
+        var user = await _repositoryManager.User.GetAsync(userId);
+        var userDto = new UserIndexDto(
+               user.Id.ToString(),
+               user.Name,
+               user.Email);
+        return userDto;
     }
+
+    public async Task UpdateUserAsync(string id, UpdateUserDto user)
+    {
+        var userToUpdate = await _repositoryManager.User.GetAsync(id);
+
+        userToUpdate.Name = user.Name;
+        userToUpdate.Email = user.Email;
+
+        _repositoryManager.User.Update(userToUpdate);
+    }
+
+    public async Task<bool> UserExist(string userId)
+    {
+        var objectId = new ObjectId(userId);
+        return await _repositoryManager.User.DoesExistAsync(u => u.Id == objectId);
+    }
+
 
     #region private methods
     private string GeneratePassword(string password)
@@ -86,6 +107,7 @@ public class UserService : IUserService
 
         return usersDto;
     }
+
 
     #endregion
 }
