@@ -1,13 +1,9 @@
-﻿using AutoMapper;
-using EShop.Contracts;
+﻿using EShop.Contracts;
+using EShop.Entities.Models;
 using EShop.LoggerService;
 using EShop.Services.Contracts;
 using EShop.Shared.DataTransferObjects.OrderDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace EShop.Services.Implementations;
 
@@ -15,19 +11,35 @@ public class OrderService : IOrderService
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly ILoggerManager _loggerManager;
-    private readonly IMapper _mapper;
 
     public OrderService(IRepositoryManager repositoryManager, 
-                        ILoggerManager loggerManager,
-                        IMapper mapper)
+                        ILoggerManager loggerManager)
     {
         _repositoryManager = repositoryManager;
         _loggerManager = loggerManager;
-        _mapper = mapper;
     }
-    public Task<OrderIndexDto> CreateOrderAsync(CreateOrderDto order)
+
+    public async Task<IEnumerable<OrderIndexDto>> GetAllOrdersAsync()
     {
-        throw new NotImplementedException();
+        var orderDocuments = await _repositoryManager.Order.GetAllAsync();
+
+        var orderDtos = MapOrdersToOrderDto(orderDocuments);
+        return orderDtos;
+    }
+
+    public async Task<OrderIndexDto> GetOrderAsync(string orderId)
+    {
+        var order = await _repositoryManager.Order.GetAsync(orderId);
+        var orderDto = MapOrderToOrderIndexDto(order);
+        return orderDto;
+    }
+
+    public async Task<OrderIndexDto> CreateOrderAsync(CreateOrderDto order)
+    {
+        var orderDocument = MapOrderDtoToOrder(order);
+        await _repositoryManager.Order.AddAsync(orderDocument);
+        var orderIndex = MapOrderToOrderIndexDto(orderDocument);
+        return orderIndex;
     }
 
     public Task<(IEnumerable<OrderIndexDto> orders, string ids)> CreateOrderCollectionAsync(IEnumerable<CreateOrderDto> orderCollection)
@@ -35,28 +47,132 @@ public class OrderService : IOrderService
         throw new NotImplementedException();
     }
 
-    public Task DeleteOrderAsync(Guid orderId)
+    public async Task DeleteOrderAsync(string orderId)
+    {
+        var objectId = new ObjectId(orderId);
+        await _repositoryManager.Order.DeleteAsync(u => u.Id == objectId);
+    }
+
+    public Task<IEnumerable<OrderIndexDto>> GetByIdsAsync(IEnumerable<string> ids)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<OrderIndexDto>> GetAllOrdersAsync()
+    public async Task UpdateOrderAsync(string orderId, UpdateOrderDto orderForUpdate)
     {
-        throw new NotImplementedException();
+        var orderDocument = await _repositoryManager.Order.GetAsync(orderId);
+        var updatedOrderDocument = MapOrderDtoToOrder(orderDocument, orderForUpdate);
+
+        _repositoryManager.Order.Update(updatedOrderDocument);
     }
 
-    public Task<IEnumerable<OrderIndexDto>> GetByIdsAsync(IEnumerable<Guid> ids)
+
+    #region private methods
+
+    private List<OrderIndexDto> MapOrdersToOrderDto(IEnumerable<Order> orderDocuments)
     {
-        throw new NotImplementedException();
+        var orderDtos = new List<OrderIndexDto>();
+        foreach (var order in orderDocuments)
+        {
+            var orderDto = MapOrderToOrderIndexDto(order);
+            orderDtos.Add(orderDto);
+        }
+        return orderDtos;
     }
 
-    public Task<OrderIndexDto> GetOrderAsync(Guid orderId)
+    private OrderIndexDto MapOrderToOrderIndexDto(Order order)
     {
-        throw new NotImplementedException();
+        return new OrderIndexDto(
+                order.Id.ToString(),
+                order.PaymentMethod,
+                order.TaxPrice,
+                order.ShippingPrice,
+                order.TotalPrice,
+                order.IsDelivered,
+                order.IsPaid
+                );
     }
 
-    public Task UpdateOrderAsync(Guid orderid, UpdateOrderDto orderForUpdate)
+    private Order MapOrderDtoToOrder(CreateOrderDto orderDto)
     {
-        throw new NotImplementedException();
+        var order = new Order
+        {
+            IsDelivered = orderDto.IsDelivered,
+            PaidAt = orderDto.PaidAt,
+            DeliveredAt = orderDto.DeliveredAt,
+            ShippingAddress = MapShippingDtoToShipping(orderDto.ShippingAddress),
+            OrderItems = MapOrderItemsDtoToOrderItems(orderDto.OrderItems),
+            PaymentMethod = orderDto.PaymentMethod,
+            PaymentResult = MapPaymentDtoToPayment(orderDto.PaymentResult),
+            ShippingPrice = orderDto.ShippingPrice,
+            TaxPrice = orderDto.TaxPrice,
+            TotalPrice = orderDto.TotalPrice,
+            UserId = orderDto.UserId,
+            IsPaid = orderDto.IsPaid,
+        };
+
+        return order;
     }
+
+    private Order MapOrderDtoToOrder(Order oldOrderDocument, UpdateOrderDto orderDto)
+    {
+        oldOrderDocument.IsDelivered = orderDto.IsDelivered;
+        oldOrderDocument.PaidAt = orderDto.PaidAt;
+        oldOrderDocument.DeliveredAt = orderDto.DeliveredAt;
+        oldOrderDocument.ShippingAddress = MapShippingDtoToShipping(orderDto.ShippingAddress);
+        oldOrderDocument.OrderItems = MapOrderItemsDtoToOrderItems(orderDto.OrderItems);
+        oldOrderDocument.PaymentMethod = orderDto.PaymentMethod;
+        oldOrderDocument.PaymentResult = MapPaymentDtoToPayment(orderDto.PaymentResult);
+        oldOrderDocument.ShippingPrice = orderDto.ShippingPrice;
+        oldOrderDocument.TaxPrice = orderDto.TaxPrice;
+        oldOrderDocument.TotalPrice = orderDto.TotalPrice;
+        oldOrderDocument.UserId = orderDto.UserId;
+        oldOrderDocument.IsPaid = orderDto.IsPaid;
+
+        return oldOrderDocument;
+    }
+
+    private PaymentResult MapPaymentDtoToPayment(PaymentResultDto? paymentResultDto)
+    {
+        var paymentResult = new PaymentResult
+        {
+            Status = paymentResultDto?.Status,
+            EmailAddress = paymentResultDto?.EmailAddress,
+            UpdateTime = paymentResultDto?.UpdateTime,
+        };
+
+        return paymentResult;
+    }
+
+    private List<OrderItem> MapOrderItemsDtoToOrderItems(List<OrderItemDto> orderItems)
+    {
+        var items = new List<OrderItem>();
+        foreach (var item in orderItems)
+        {
+            var orderItem = new OrderItem
+            {
+                Name = item.Name,
+                Price = item.Price,
+                ProductId = item.ProductId,
+                Qty = item.Qty,
+            };
+            items.Add(orderItem);
+        };
+        return items;
+    }
+
+    private ShippingAddress MapShippingDtoToShipping(ShippingAddressDto shippingAddressDto)
+    {
+        var shippingAddress = new ShippingAddress
+        {
+            Address = shippingAddressDto.Address,
+            City = shippingAddressDto.City,
+            PostalCode = shippingAddressDto.PostalCode,
+            Country = shippingAddressDto.Country,
+        };
+
+        return shippingAddress;
+    }
+
+    #endregion
 }

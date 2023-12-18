@@ -10,10 +10,10 @@ namespace EShop.Services.Contracts;
 public interface IOrderService
 {
     Task<IEnumerable<OrderIndexDto>> GetAllOrdersAsync();
-    Task<OrderIndexDto> GetOrderAsync(Guid orderId);
+    Task<OrderIndexDto> GetOrderAsync(string orderId);
     Task<OrderIndexDto> CreateOrderAsync(CreateOrderDto order);
-    Task<IEnumerable<OrderIndexDto>> GetByIdsAsync(IEnumerable<Guid> ids);
+    Task<IEnumerable<OrderIndexDto>> GetByIdsAsync(IEnumerable<string> ids);
     Task<(IEnumerable<OrderIndexDto> orders, string ids)> CreateOrderCollectionAsync(IEnumerable<CreateOrderDto> orderCollection);
-    Task DeleteOrderAsync(Guid orderId);
-    Task UpdateOrderAsync(Guid orderid, UpdateOrderDto orderForUpdate);
+    Task DeleteOrderAsync(string orderId);
+    Task UpdateOrderAsync(string orderid, UpdateOrderDto orderForUpdate);
 }
