@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EShop.Contracts\EShop.Contracts.csproj" />
     <ProjectReference Include="..\EShop.Services\EShop.Services.csproj" />
     <ProjectReference Include="..\EShop.Shared\EShop.Shared.csproj" />
   </ItemGroup>

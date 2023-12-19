@@ -1,12 +1,10 @@
-﻿using AutoMapper;
-using EShop.Contracts;
+﻿using EShop.Contracts;
 using EShop.Entities.Exceptions;
 using EShop.Entities.Models;
 using EShop.LoggerService;
 using EShop.Services.Contracts;
 using EShop.Shared.DataTransferObjects.ProductDtos;
 using MongoDB.Bson;
-using System.Collections;
 
 namespace EShop.Services.Implementations;
 

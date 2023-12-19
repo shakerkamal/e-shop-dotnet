@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using EShop.Contracts;
+﻿using EShop.Contracts;
 using EShop.Entities.Models;
 using EShop.LoggerService;
 using EShop.Services.Contracts;

@@ -1,12 +1,6 @@
-﻿using AutoMapper;
-using EShop.Contracts;
+﻿using EShop.Contracts;
 using EShop.LoggerService;
 using EShop.Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EShop.Services.Implementations;
 
