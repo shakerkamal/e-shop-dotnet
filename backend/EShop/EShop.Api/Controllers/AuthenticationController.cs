@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using EShop.Application.Commands.AuthenticateUser;
+using EShop.Shared.DataTransferObjects.AuthenticationDtos;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EShop.Api.Controllers
@@ -14,9 +16,10 @@ namespace EShop.Api.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginUser([FromBody]string userName, string password)
+        public async Task<IActionResult> LoginUser([FromBody]AuthenticateUserDto authenticateUser)
         {
-            throw new NotImplementedException();
+            var token = await _sender.Send(new AuthenticateUserCommand(authenticateUser));
+            return Ok(token);
         }
 
     }

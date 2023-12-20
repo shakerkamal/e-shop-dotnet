@@ -20,10 +20,14 @@ public class User : CoreBaseEntity
 
     [BsonRequired]
     public bool IsAdmin { get; set; }
+    public string? RefreshToken { get; set; }
 
     [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonDateTimeOptions(Representation = BsonType.String)]
+    public DateTime RefreshTokenExpiryTime { get; set; }
 }
