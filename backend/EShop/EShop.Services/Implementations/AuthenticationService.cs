@@ -77,7 +77,7 @@ public class AuthenticationService : IAuthenticationService
     private bool VerifyPassword(string hasedPassword, string password)
     {
         var response = BCrypt.Net.BCrypt.Verify(password, hasedPassword);
-        throw new NotImplementedException();
+        return response;
     }
 
     private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCreds, List<Claim> claims)

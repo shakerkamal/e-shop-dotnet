@@ -26,6 +26,7 @@ namespace EShop.Api.Extensions
                             NotFoundException => StatusCodes.Status404NotFound,
                             BadRequestException => StatusCodes.Status400BadRequest,
                             ValidationAppException => StatusCodes.Status422UnprocessableEntity,
+                            UnAuthorizedException => StatusCodes.Status401Unauthorized,
                             _ => StatusCodes.Status500InternalServerError
                         };
                         logger.LogError($"Something went wrong: {contextFeature.Error}");
