@@ -1,12 +1,6 @@
-﻿using EShop.Entities.Exceptions;
-using EShop.Services.Contracts;
+﻿using EShop.Services.Contracts;
 using EShop.Shared.DataTransferObjects.AuthenticationDtos;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EShop.Application.Commands.AuthenticateUser;
 
@@ -22,7 +16,7 @@ internal sealed class AuthenticateUserCommandHandler : IRequestHandler<Authentic
     public async Task<TokenDto> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
     {
         if (!await _serviceManager.AuthenticationService.Authenticate(request.Authenticate))
-            throw new UnAuthorizedException(string.Empty);
+            throw new UnauthorizedAccessException();
         var token = await _serviceManager.AuthenticationService.CreateToken(true);
         return token;
     }

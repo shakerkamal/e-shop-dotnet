@@ -5,6 +5,7 @@ using EShop.Application.Queries.GetOrder;
 using EShop.Application.Queries.GetOrders;
 using EShop.Shared.DataTransferObjects.OrderDtos;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace EShop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly ISender _sender;

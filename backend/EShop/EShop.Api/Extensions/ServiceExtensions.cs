@@ -9,6 +9,7 @@ using EShop.Services.Implementations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
 using System.Text;
 
 namespace EShop.Api.Extensions;
@@ -17,11 +18,17 @@ public static class ServiceExtensions
 {
     public static void ConfigureDatabase(this IServiceCollection services, IConfiguration Configuration)
     {
-        services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDbSettings"));
+        var mongoDbConfig = Configuration
+                .GetSection("MongoDbSettings")
+                .Get<MongoDbSettings>();
 
         services.AddSingleton<IMongoDbSettings>(serviceProvider =>
             serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value
             );
+
+        services.AddSingleton<MongoClient>(_ => new MongoClient(mongoDbConfig.ConnectionString));
+        services.AddSingleton<IMongoDatabase>(
+            provider => provider.GetRequiredService<MongoClient>().GetDatabase(mongoDbConfig.DatabaseName));
     }
 
     public static void ConfigureCors(this IServiceCollection services) =>

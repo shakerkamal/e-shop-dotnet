@@ -10,9 +10,9 @@ public class RepositoryManager : IRepositoryManager
     private IOrderRepository _orderRepository;
     private IUserRepository _userRepository;
 
-    public RepositoryManager(IMongoDbSettings settings)
+    public RepositoryManager(IMongoDatabase database)
     {
-        _database = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
+        _database = database;//new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
     }
     public IProductRepository Product
     { 
