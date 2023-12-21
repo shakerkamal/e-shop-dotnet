@@ -3,11 +3,14 @@ using EShop.Application.Commands.DeleteOrder;
 using EShop.Application.Commands.UpdateOrder;
 using EShop.Application.Queries.GetOrder;
 using EShop.Application.Queries.GetOrders;
+using EShop.Entities.Models;
 using EShop.Shared.DataTransferObjects.OrderDtos;
+using EShop.Shared.RequestFeatures;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace EShop.Api.Controllers
 {
@@ -24,10 +27,11 @@ namespace EShop.Api.Controllers
         }
 
         [HttpGet(Name = "GetOrders")]
-        public async Task<IActionResult> GetOrders()
+        public async Task<IActionResult> GetOrders([FromQuery] PagedOrder paged)
         {
-            var orders = await _sender.Send(new GetOrdersQuery());
-            return Ok(orders);
+            var orders = await _sender.Send(new GetOrdersQuery(paged));
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(orders.GetHeader()));
+            return Ok(orders.List);
         }
 
         [HttpGet("{id}")]

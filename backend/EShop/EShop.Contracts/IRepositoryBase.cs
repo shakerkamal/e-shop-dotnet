@@ -12,9 +12,10 @@ public interface IRepositoryBase<TDocument> where TDocument : CoreBaseEntity
     IEnumerable<TDocument> GetAll();
     Task<IEnumerable<TDocument>> GetAllAsync(CancellationToken cancellationToken = default);
     PaginatedList<TDocument> GetAll(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true);
-    Task<PaginatedList<TDocument>> GetAllAsync(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true);
+    Task<PaginatedList<TProjected>> GetAllAsync<TProjected>(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, TProjected>> projectionExpression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true);
+    Task<PaginatedList<TProjected>> GetAllAsync<TProjected>(Expression<Func<TDocument, TProjected>> projectionExpression, int pageNumber, int pageSize, bool isAscending = true);
     IEnumerable<TDocument> FindByCondition(Expression<Func<TDocument, bool>> expression);
-    //Task<IEnumerable<TDocument>> FindByConditionAsync(Expression<Func<TDocument, bool>> expression, CancellationToken cancellationToken = default);
+    //Task<IEnumerable<TProjected>> FindByConditionAsync<TProjected>(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, TProjected>> projectionExpression, CancellationToken cancellationToken = default);
     void Add(TDocument entity);
     Task AddAsync(TDocument entity, CancellationToken cancellationToken = default);
     void AddRange(IEnumerable<TDocument> entities);

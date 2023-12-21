@@ -3,6 +3,7 @@ using EShop.Entities.Models;
 using EShop.LoggerService;
 using EShop.Services.Contracts;
 using EShop.Shared.DataTransferObjects.OrderDtos;
+using EShop.Shared.RequestFeatures;
 using MongoDB.Bson;
 
 namespace EShop.Services.Implementations;
@@ -22,9 +23,25 @@ public class OrderService : IOrderService
     public async Task<IEnumerable<OrderIndexDto>> GetAllOrdersAsync()
     {
         var orderDocuments = await _repositoryManager.Order.GetAllAsync();
-
         var orderDtos = MapOrdersToOrderDto(orderDocuments);
         return orderDtos;
+    }
+
+    public async Task<PaginatedList<OrderIndexDto>> GetAllOrdersAsync(PagedOrder paged)
+    {
+        var orderDocuments = await _repositoryManager.Order.GetAllAsync<OrderIndexDto>(
+             p => new OrderIndexDto
+             (
+                 p.Id.ToString(), 
+                 p.PaymentMethod, 
+                 p.TaxPrice, 
+                 p.ShippingPrice, 
+                 p.TotalPrice, 
+                 p.IsDelivered, 
+                 p.IsPaid
+            ),paged.PageNumber, pageSize: paged.PageSize);
+
+        return orderDocuments;
     }
 
     public async Task<OrderIndexDto> GetOrderAsync(string orderId)

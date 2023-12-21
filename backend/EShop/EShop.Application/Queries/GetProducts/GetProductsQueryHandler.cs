@@ -1,10 +1,11 @@
-﻿using EShop.Services.Contracts;
+﻿using EShop.Contracts;
+using EShop.Services.Contracts;
 using EShop.Shared.DataTransferObjects.ProductDtos;
 using MediatR;
 
 namespace EShop.Application.Queries.GetProducts;
 
-internal sealed class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, IEnumerable<ProductIndexDto>>
+internal sealed class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, PaginatedList<ProductIndexDto>>
 {
     private readonly IServiceManager _serviceManager;
 
@@ -13,9 +14,9 @@ internal sealed class GetProductsQueryHandler : IRequestHandler<GetProductsQuery
         _serviceManager = serviceManager;
     }
 
-    public async Task<IEnumerable<ProductIndexDto>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<ProductIndexDto>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await _serviceManager.ProductService.GetAllProductsAsync();
+        var products = await _serviceManager.ProductService.GetAllProductsAsync(request.PagedProduct);
 
         return products;
     }

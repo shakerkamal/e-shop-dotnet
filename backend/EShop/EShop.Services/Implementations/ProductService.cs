@@ -4,6 +4,7 @@ using EShop.Entities.Models;
 using EShop.LoggerService;
 using EShop.Services.Contracts;
 using EShop.Shared.DataTransferObjects.ProductDtos;
+using EShop.Shared.RequestFeatures;
 using MongoDB.Bson;
 
 namespace EShop.Services.Implementations;
@@ -26,6 +27,21 @@ public class ProductService : IProductService
 
         var response = MapToProductIndexDtos(products);
         return response;
+    }
+    public async Task<PaginatedList<ProductIndexDto>> GetAllProductsAsync(PagedProduct pagedProduct)
+    {
+        var pagedResponse = await _repositoryManager.Product.GetAllAsync<ProductIndexDto>(
+            projection => new ProductIndexDto(
+                projection.Id.ToString(), 
+                projection.Name,
+                projection.Image,
+                projection.Brand,
+                projection.Category,
+                projection.NumReviews,
+                projection.Price,
+                projection.Rating)
+            ,pagedProduct.PageNumber, pagedProduct.PageSize);
+        return pagedResponse;
     }
 
     public async Task<ProductDetailsDto> GetProductAsync(string productId)
@@ -103,7 +119,6 @@ public class ProductService : IProductService
     }
 
     #region private methods
-
     private Product MapProductDtoToDocument(CreateProductDto product)
     {
         var productDocument = new Product
@@ -127,7 +142,6 @@ public class ProductService : IProductService
 
         return productDocument;
     }
-
 
     private List<ProductIndexDto> MapToProductIndexDtos(IEnumerable<Product> products)
     {
@@ -175,7 +189,6 @@ public class ProductService : IProductService
         return Enumerable.Empty<Review>().ToList();
     }
 
-
     private List<ReviewDto>? MapReviewsToReviewDto(List<Review>? reviews)
     {
         if (reviews is not null)
@@ -190,6 +203,5 @@ public class ProductService : IProductService
         }
         return Enumerable.Empty<ReviewDto>().ToList();
     }
-
     #endregion
 }

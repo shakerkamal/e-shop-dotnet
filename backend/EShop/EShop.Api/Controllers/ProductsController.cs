@@ -4,8 +4,10 @@ using EShop.Application.Commands.UpdateProduct;
 using EShop.Application.Queries.GetProduct;
 using EShop.Application.Queries.GetProducts;
 using EShop.Shared.DataTransferObjects.ProductDtos;
+using EShop.Shared.RequestFeatures;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace EShop.Api.Controllers;
 
@@ -21,10 +23,11 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet(Name ="GetProducts")]
-    public async Task<IActionResult> GetProducts()
+    public async Task<IActionResult> GetProducts([FromQuery]PagedProduct pagedProduct) 
     {
-        var products = await _sender.Send(new GetProductsQuery());
-        return Ok(products);
+        var products = await _sender.Send(new GetProductsQuery(pagedProduct));
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(products.GetHeader()));
+        return Ok(products.List);
     }
 
     [HttpGet("{id}")]

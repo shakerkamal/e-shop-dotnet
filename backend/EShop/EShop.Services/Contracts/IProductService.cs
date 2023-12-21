@@ -1,4 +1,6 @@
-﻿using EShop.Shared.DataTransferObjects.ProductDtos;
+﻿using EShop.Contracts;
+using EShop.Shared.DataTransferObjects.ProductDtos;
+using EShop.Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,7 @@ namespace EShop.Services.Contracts;
 public interface IProductService
 {
     Task<IEnumerable<ProductIndexDto>> GetAllProductsAsync();
+    Task<PaginatedList<ProductIndexDto>> GetAllProductsAsync(PagedProduct pagedProduct);
     Task<ProductDetailsDto> GetProductAsync(string productId);
     Task<ProductIndexDto> CreateProductAsync(CreateProductDto product);
     Task<IEnumerable<ProductIndexDto>> GetByIdsAsync(IEnumerable<string> ids);

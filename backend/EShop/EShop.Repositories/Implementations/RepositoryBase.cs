@@ -105,7 +105,7 @@ public abstract class RepositoryBase<TDocument> : IRepositoryBase<TDocument> whe
         return paginatedList;
     }
 
-    public async Task<PaginatedList<TDocument>> GetAllAsync(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true)
+    public async Task<PaginatedList<TProjected>> GetAllAsync<TProjected>(Expression<Func<TDocument, bool>> expression, Expression<Func<TDocument, TProjected>> projectionExpression, Expression<Func<TDocument, string>> order, int pageNumber, int pageSize, bool isAscending = true)
     {
         List<TDocument> list = new List<TDocument>();
         var totalItems = await _collection.CountDocumentsAsync(expression);
@@ -119,12 +119,37 @@ public abstract class RepositoryBase<TDocument> : IRepositoryBase<TDocument> whe
         }
         var pagedResponse = await _collection
             .Find(expression)
+            .Project(projectionExpression)
             .Skip((pageNumber - 1) * pageSize)
             .Limit(pageSize)
             //.SortBy(order) 
             .ToListAsync();
 
-        var paginatedList = new PaginatedList<TDocument>(totalItems, pageNumber, pageSize, pagedResponse);
+        var paginatedList = new PaginatedList<TProjected>(totalItems, pageNumber, pageSize, pagedResponse);
+        return paginatedList;
+    }
+
+    public async Task<PaginatedList<TProjected>> GetAllAsync<TProjected>(Expression<Func<TDocument, TProjected>> projectionExpression, int pageNumber, int pageSize, bool isAscending = true)
+    {
+        List<TDocument> list = new List<TDocument>();
+        var totalItems = await _collection.CountDocumentsAsync(Builders<TDocument>.Filter.Empty);
+        if (isAscending)
+        {
+            //sort by ascending order
+        }
+        else
+        {
+            //sort by descending order
+        }
+        var pagedResponse = await _collection
+            .Find(Builders<TDocument>.Filter.Empty)
+            .Project(projectionExpression)
+            .Skip((pageNumber - 1) * pageSize)
+            .Limit(pageSize)
+            //.SortBy() 
+            .ToListAsync();
+
+        var paginatedList = new PaginatedList<TProjected>(totalItems, pageNumber, pageSize, pagedResponse);
         return paginatedList;
     }
 

@@ -9,6 +9,7 @@ using EShop.Services.Implementations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using System.Text;
 
@@ -90,5 +91,55 @@ public static class ServiceExtensions
 
     public static void AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration) =>
         services.Configure<JwtConfiguration>(configuration.GetSection("JwtSettings"));
+
+    public static void ConfigureSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(opt =>
+        {
+            opt.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "EShop API",
+                Version = "v1",
+                Description = "EShop API by Shaker",
+                TermsOfService = new Uri("https://test.com/terms"),
+                Contact = new OpenApiContact
+                {
+                    Name = "Md Shaker Ibna Kamal",
+                    Email = "shakeribnakamale@gmail.com",
+                    Url = new Uri("https://twitter.com/ShakerKamal12")
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "Pioneers Ltd",
+                    Url = new Uri("https://test.com/license")
+                }
+            });
+
+            opt.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
+            {
+                In = ParameterLocation.Header,
+                Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                Name = "Authorization",
+                BearerFormat = "Jwt",
+                Type = SecuritySchemeType.ApiKey
+
+            });
+
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement()
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "oauth2"
+                        }
+                    },
+                    new List<string>()
+                }
+            });
+        });
+    }
 
 }
