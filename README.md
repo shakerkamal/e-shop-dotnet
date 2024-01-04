@@ -1,6 +1,6 @@
 # E-Shop .NET
 
-![E-Shop Logo](https://shorturl.at/AQU36)
+![E-Shop Logo](/assets/shopping.png)
 
 E-Shop .NET is a robust e-commerce platform built on .NET Core 6.0 with a MongoDB backend. It follows the Repository pattern for data access abstraction and implements the CQRS pattern using Mediatr for seamless command and query handling. The project is designed to be scalable and flexible, with future plans to incorporate React as the front-end technology.
 
