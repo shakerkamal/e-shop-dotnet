@@ -22,11 +22,11 @@ jobs:
       with:
         dotnet-version: 6.0.412
 
-    - name: List all files
-      run: ls -ltra
+    # - name: List all files
+    #   run: ls -ltra
 
-    # - name: Restore dependencies
-    #   run: dotnet restore ./backend/EShop/EShop.sln
+    - name: Restore dependencies
+      run: dotnet restore /backend/EShop/EShop.sln
 
     
     # - name: Build
