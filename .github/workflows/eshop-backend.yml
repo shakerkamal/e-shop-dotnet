@@ -22,16 +22,13 @@ jobs:
       with:
         dotnet-version: 6.0.412
 
-    # - name: List all files
-    #   run: ls -ltra
-
     - name: Restore dependencies
       run: dotnet restore
       working-directory: backend/EShop/EShop.Api
-
     
-    # - name: Build
-    #   run: dotnet build ./backend/EShop/EShop.sln --no-restore
+    - name: Build
+      run: dotnet build --no-restore
+      # working-directory: backend/EShop/EShop.Api
 
     # - name: Test
     #   run: dotnet test --no-build --verbosity normal
