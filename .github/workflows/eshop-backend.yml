@@ -27,7 +27,7 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: backend/EShop/EShop.sln
+      working-directory: backend/EShop/EShop.Api
 
     
     # - name: Build
