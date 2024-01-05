@@ -28,7 +28,7 @@ jobs:
     
     - name: Build
       run: dotnet build --no-restore
-      # working-directory: backend/EShop/EShop.Api
+      working-directory: backend/EShop/EShop.Api
 
     # - name: Test
     #   run: dotnet test --no-build --verbosity normal
