@@ -9,6 +9,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# for setting environment variables  
+# env:
+
 jobs:
   build:
     name: Building the Backend
@@ -29,6 +32,11 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: backend/EShop/EShop.Api
-
-    # - name: Test
-    #   run: dotnet test --no-build --verbosity normal
+    
+  # unit-test:
+  #   runs-on: ubuntu-latest
+    
+  #   steps:
+  #   - name: Test
+  #     run: dotnet test --no-build --verbosity normal
+  #     working-directory: backend/EShop/EShop.Test
