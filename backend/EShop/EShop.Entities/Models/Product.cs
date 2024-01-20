@@ -2,23 +2,10 @@
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace EShop.Entities.Models;
-public class Review
-{
-    public string? Name { get; set; }
-    public int Rating { get; set; }
-    public string? Comment { get; set; }
-    [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-}
 
 [BsonCollection("products")]
 public class Product : CoreBaseEntity
 {
-    //[BsonId]
-    //[BsonRepresentation(BsonType.ObjectId)]
-    //public string Id { get; set; } = null!;
     [BsonRepresentation(BsonType.ObjectId)]
     [BsonRequired]
     public string UserId { get; set; } = null!;
@@ -32,6 +19,17 @@ public class Product : CoreBaseEntity
     public int NumReviews { get; set; }
     public double Price { get; set; }
     public int CountInStock { get; set; }
+    [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+}
+
+public class Review
+{
+    public string? Name { get; set; }
+    public int Rating { get; set; }
+    public string? Comment { get; set; }
     [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     [BsonDateTimeOptions(Representation = BsonType.String, Kind = DateTimeKind.Utc)]

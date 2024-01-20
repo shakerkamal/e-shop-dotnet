@@ -1,4 +1,6 @@
-﻿using EShop.Application;
+﻿using Amazon.Util.Internal;
+using Azure.Storage.Blobs;
+using EShop.Application;
 using EShop.Contracts;
 using EShop.Entities.ConfigurationModels;
 using EShop.LoggerService;
@@ -140,6 +142,11 @@ public static class ServiceExtensions
                 }
             });
         });
+    }
+
+    public static void ConfigureAzureBlobStorage(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton(x => new BlobServiceClient(configuration.GetSection("BlobStorage").Value));
     }
 
 }
