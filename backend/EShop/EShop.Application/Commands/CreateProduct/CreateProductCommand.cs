@@ -1,5 +1,6 @@
 ﻿using EShop.Shared.DataTransferObjects.ProductDtos;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace EShop.Application.Commands.CreateProduct;
 

@@ -1,7 +1,7 @@
 ﻿namespace EShop.Shared.DataTransferObjects.ProductDtos;
 
 public record CreateProductDto(
-    string UserId, 
+    string UserId,
     string? Name,
     string? Image,
     string? Brand,

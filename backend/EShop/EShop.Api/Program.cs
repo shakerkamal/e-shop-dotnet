@@ -17,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.ConfigureAzureBlobStorage(builder.Configuration);
 
 var app = builder.Build();
 var logger = app.Services.GetRequiredService<ILoggerManager>();
