@@ -2,7 +2,7 @@
 
 public record ProductIndexDto(
     string Id,
-    string Name, 
+    string Name,
     string Image,
     string Brand,
     string Category,

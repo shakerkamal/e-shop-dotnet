@@ -3,12 +3,10 @@ using EShop.Application.Commands.DeleteOrder;
 using EShop.Application.Commands.UpdateOrder;
 using EShop.Application.Queries.GetOrder;
 using EShop.Application.Queries.GetOrders;
-using EShop.Entities.Models;
 using EShop.Shared.DataTransferObjects.OrderDtos;
 using EShop.Shared.RequestFeatures;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 

@@ -10,16 +10,18 @@ public class RepositoryManager : IRepositoryManager
     private IOrderRepository _orderRepository;
     private IUserRepository _userRepository;
 
-    public RepositoryManager(IMongoDatabase database) => _database = database;
-
+    public RepositoryManager(IMongoDatabase database)
+    {
+        _database = database;//new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
+    }
     public IProductRepository Product
-    { 
-        get 
+    {
+        get
         {
             if (_productRepository is null)
                 _productRepository = new ProductReposiotry(_database);
-            return _productRepository; 
-        } 
+            return _productRepository;
+        }
     }
 
     public IOrderRepository Order

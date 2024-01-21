@@ -43,7 +43,7 @@ public class DocumentService : IDocumentService
         {
             var downloadInfo = await file.DownloadAsync();
             return new FileInfoDto(
-                        file.Uri.AbsoluteUri, 
+                        file.Uri.AbsoluteUri,
                         fileName,
                         downloadInfo.Value.Details.ContentType,
                         downloadInfo.Value.Content);

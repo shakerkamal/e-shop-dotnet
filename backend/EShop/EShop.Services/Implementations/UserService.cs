@@ -12,7 +12,7 @@ public class UserService : IUserService
     private readonly IRepositoryManager _repositoryManager;
     private readonly ILoggerManager _loggerManager;
 
-    public UserService(IRepositoryManager repositoryManager, 
+    public UserService(IRepositoryManager repositoryManager,
                     ILoggerManager loggerManager)
     {
         _repositoryManager = repositoryManager;
@@ -21,14 +21,14 @@ public class UserService : IUserService
     public async Task<UserIndexDto> CreateUserAsync(CreateUserDto user)
     {
         var encryptedPassword = GeneratePassword(user.Password);
-        var userDocument = new User 
+        var userDocument = new User
         {
             Name = user.Name,
             Email = user.Email,
             Password = encryptedPassword,
             IsAdmin = user.IsAdmin
         };
-        
+
         await _repositoryManager.User.AddAsync(userDocument);
 
         return new UserIndexDto(userDocument.Id.ToString(), userDocument.Name, userDocument.Email);

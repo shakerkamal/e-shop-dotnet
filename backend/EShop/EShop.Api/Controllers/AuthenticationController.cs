@@ -17,14 +17,14 @@ namespace EShop.Api.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginUser([FromBody]AuthenticateUserDto authenticateUser)
+        public async Task<IActionResult> LoginUser([FromBody] AuthenticateUserDto authenticateUser)
         {
             var token = await _sender.Send(new AuthenticateUserCommand(authenticateUser));
             return Ok(token);
         }
 
         [HttpPost("Refresh")]
-        public async Task<IActionResult> RefreshToken([FromBody]TokenDto token)
+        public async Task<IActionResult> RefreshToken([FromBody] TokenDto token)
         {
             var response = await _sender.Send(new GenerateRefreshTokenCommand(token));
             return Ok(response);

@@ -13,7 +13,7 @@ public class OrderService : IOrderService
     private readonly IRepositoryManager _repositoryManager;
     private readonly ILoggerManager _loggerManager;
 
-    public OrderService(IRepositoryManager repositoryManager, 
+    public OrderService(IRepositoryManager repositoryManager,
                         ILoggerManager loggerManager)
     {
         _repositoryManager = repositoryManager;
@@ -32,14 +32,14 @@ public class OrderService : IOrderService
         var orderDocuments = await _repositoryManager.Order.GetAllAsync<OrderIndexDto>(
              p => new OrderIndexDto
              (
-                 p.Id.ToString(), 
-                 p.PaymentMethod, 
-                 p.TaxPrice, 
-                 p.ShippingPrice, 
-                 p.TotalPrice, 
-                 p.IsDelivered, 
+                 p.Id.ToString(),
+                 p.PaymentMethod,
+                 p.TaxPrice,
+                 p.ShippingPrice,
+                 p.TotalPrice,
+                 p.IsDelivered,
                  p.IsPaid
-            ),paged.PageNumber, pageSize: paged.PageSize);
+            ), paged.PageNumber, pageSize: paged.PageSize);
 
         return orderDocuments;
     }

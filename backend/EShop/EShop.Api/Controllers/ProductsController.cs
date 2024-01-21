@@ -22,8 +22,8 @@ public class ProductsController : ControllerBase
         _sender = sender;
     }
 
-    [HttpGet(Name ="GetProducts")]
-    public async Task<IActionResult> GetProducts([FromQuery]PagedProduct pagedProduct) 
+    [HttpGet(Name = "GetProducts")]
+    public async Task<IActionResult> GetProducts([FromQuery] PagedProduct pagedProduct)
     {
         var products = await _sender.Send(new GetProductsQuery(pagedProduct));
         Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(products.GetHeader()));

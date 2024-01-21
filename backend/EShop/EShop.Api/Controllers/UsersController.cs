@@ -3,11 +3,8 @@ using EShop.Application.Commands.DeleteUser;
 using EShop.Application.Commands.UpdateUser;
 using EShop.Application.Queries.GetUser;
 using EShop.Application.Queries.GetUsers;
-using EShop.Entities.Models;
 using EShop.Shared.DataTransferObjects.UserDtos;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EShop.Api.Controllers;
@@ -44,7 +41,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(string id, [FromBody]UpdateUserDto updateUser)
+    public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto updateUser)
     {
         await _sender.Send(new UpdateUserCommand(id, updateUser));
         return NoContent();

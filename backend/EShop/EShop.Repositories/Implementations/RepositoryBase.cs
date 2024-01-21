@@ -1,5 +1,4 @@
-﻿using Amazon.Auth.AccessControlPolicy;
-using EShop.Contracts;
+﻿using EShop.Contracts;
 using EShop.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;

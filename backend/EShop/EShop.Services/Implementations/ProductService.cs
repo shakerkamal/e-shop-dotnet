@@ -14,7 +14,7 @@ public class ProductService : IProductService
     private readonly IRepositoryManager _repositoryManager;
     private readonly ILoggerManager _loggerManager;
 
-    public ProductService(IRepositoryManager repositoryManager, 
+    public ProductService(IRepositoryManager repositoryManager,
                         ILoggerManager loggerManager)
     {
         _repositoryManager = repositoryManager;
@@ -32,7 +32,7 @@ public class ProductService : IProductService
     {
         var pagedResponse = await _repositoryManager.Product.GetAllAsync<ProductIndexDto>(
             projection => new ProductIndexDto(
-                projection.Id.ToString(), 
+                projection.Id.ToString(),
                 projection.Name,
                 projection.Image,
                 projection.Brand,
@@ -40,7 +40,7 @@ public class ProductService : IProductService
                 projection.NumReviews,
                 projection.Price,
                 projection.Rating)
-            ,pagedProduct.PageNumber, pagedProduct.PageSize);
+            , pagedProduct.PageNumber, pagedProduct.PageSize);
         return pagedResponse;
     }
 
@@ -145,7 +145,7 @@ public class ProductService : IProductService
 
     private List<ProductIndexDto> MapToProductIndexDtos(IEnumerable<Product> products)
     {
-        var productsDto = new List<ProductIndexDto>();  
+        var productsDto = new List<ProductIndexDto>();
         foreach (var product in products)
         {
             var productDto = MapProductToProductIndexDto(product);
@@ -178,9 +178,9 @@ public class ProductService : IProductService
             {
                 var reviewDocument = new Review
                 {
-                    Name=review.Name,
+                    Name = review.Name,
                     Comment = review.Comment,
-                    Rating =review.Rating
+                    Rating = review.Rating
                 };
 
                 reviewDocuments.Add(reviewDocument);

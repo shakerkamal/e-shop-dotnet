@@ -1,8 +1,8 @@
 ﻿namespace EShop.Shared.DataTransferObjects.OrderDtos;
 
 public record OrderDetailsDto(
-    string Id, 
-    List<OrderItemDto> OrderItems, 
+    string Id,
+    List<OrderItemDto> OrderItems,
     ShippingAddressDto ShippingAddress,
     string? PaymentMethod,
     PaymentResultDto? PaymentResult,
